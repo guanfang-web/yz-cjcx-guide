@@ -83,7 +83,7 @@ title: 成绩模拟查询系统使用说明书
 
 <div class="claim-row">
   <label for="orderNoInput">订单号</label>
-  <input id="orderNoInput" type="text" maxlength="32" placeholder="例如：P787800186541310451" autocomplete="off">
+  <input id="orderNoInput" type="text" maxlength="32" placeholder="P开头的数字串" autocomplete="off">
 </div>
 
 <div class="actions">
