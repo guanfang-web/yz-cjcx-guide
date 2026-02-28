@@ -7,6 +7,52 @@ title: 成绩模拟查询系统使用说明书
   .hl-warn { color: #d1242f; font-weight: 700; }
   .hl-ok { color: #0a7f39; font-weight: 700; }
   .hl-muted { color: #6b7280; }
+  .claim-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+    align-items: center;
+    margin: 12px 0;
+  }
+  .claim-row label {
+    font-weight: 700;
+    color: #1f6feb;
+  }
+  .claim-row input {
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid #d0d7e2;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .btn {
+    border: none;
+    border-radius: 6px;
+    height: 36px;
+    padding: 0 14px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #1677d2;
+    color: #fff;
+  }
+  .btn.secondary {
+    background: #eef4fb;
+    color: #315d86;
+    border: 1px solid #c8d8ea;
+  }
+  .msg {
+    margin-top: 10px;
+    min-height: 24px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+  }
+  .msg.ok { color: #0a7f39; font-weight: 700; }
+  .msg.err { color: #d1242f; font-weight: 700; }
   .doc-tip {
     margin: 12px 0 16px;
     padding: 10px 12px;
@@ -35,7 +81,6 @@ title: 成绩模拟查询系统使用说明书
 
 如果您在“快速开始”第二步的时候绑定资格码出现问题，可以来这里重新申请新的资格码，申请时需要填写订单号（一个订单号支持申请两次）。
 
-```html
 <div class="claim-row">
   <label for="orderNoInput">订单号</label>
   <input id="orderNoInput" type="text" maxlength="32" placeholder="例如：P787800186541310451" autocomplete="off">
@@ -46,7 +91,6 @@ title: 成绩模拟查询系统使用说明书
   <button id="copyCodeBtn" class="btn secondary">复制最新资格码</button>
 </div>
 <div id="claimMsg" class="msg"></div>
-```
 
 ## 常见问题（FAQ）
 
@@ -64,3 +108,104 @@ title: 成绩模拟查询系统使用说明书
 12. 能不能有水印？非官方页面，不支持水印。
 13. 会不会泄露我的信息？<span class="hl-ok">不会！完全不会！</span>您的信息仅在您自己的设备上保存，不会上传。我们不会收集用户信息！
 14. 虚拟商品，一经发货不支持无理由退货哦，请谅解。
+
+<script>
+  (function () {
+    var API_BASE = "https://patient-rec-atlanta-diary.trycloudflare.com";
+    var DEVICE_KEY = "yz_guide_device_id_v1";
+    var LAST_CODE_KEY = "yz_guide_last_claim_code_v1";
+
+    var orderNoInput = document.getElementById("orderNoInput");
+    var claimBtn = document.getElementById("claimCodeBtn");
+    var copyBtn = document.getElementById("copyCodeBtn");
+    var claimMsg = document.getElementById("claimMsg");
+
+    if (!orderNoInput || !claimBtn || !copyBtn || !claimMsg) {
+      return;
+    }
+
+    function normalizeOrderNo(orderNo) {
+      return String(orderNo || "").trim().toUpperCase();
+    }
+
+    function isValidOrderNo(orderNo) {
+      return /^P\d{18}$/.test(orderNo);
+    }
+
+    function getDeviceId() {
+      var existing = localStorage.getItem(DEVICE_KEY);
+      if (existing) {
+        return existing;
+      }
+      var seed = "dev-" + Math.random().toString(36).slice(2, 12) + Date.now().toString(36).slice(-4);
+      localStorage.setItem(DEVICE_KEY, seed);
+      return seed;
+    }
+
+    function setMsg(text, type) {
+      claimMsg.textContent = text || "";
+      claimMsg.className = "msg";
+      if (type === "ok") {
+        claimMsg.className += " ok";
+      } else if (type === "err") {
+        claimMsg.className += " err";
+      }
+    }
+
+    async function claimCode() {
+      var orderNo = normalizeOrderNo(orderNoInput.value);
+      if (!isValidOrderNo(orderNo)) {
+        setMsg("订单号格式错误，请输入 P + 18位数字（示例：P787800186541310451）。", "err");
+        return;
+      }
+
+      setMsg("正在申请，请稍候...", "");
+
+      try {
+        var response = await fetch(API_BASE + "/api/v1/codes/claim-extra", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            deviceId: getDeviceId(),
+            orderNo: orderNo
+          })
+        });
+
+        var data = {};
+        try {
+          data = await response.json();
+        } catch (error) {
+          data = {};
+        }
+
+        if (!response.ok || !data.ok) {
+          var errMsg = data.message || ("申请失败（HTTP " + response.status + "）");
+          setMsg(errMsg, "err");
+          return;
+        }
+
+        localStorage.setItem(LAST_CODE_KEY, data.code || "");
+        setMsg("申请成功\n新资格码：" + (data.code || "无"), "ok");
+      } catch (error) {
+        setMsg("网络请求失败，请稍后刷新重试。", "err");
+      }
+    }
+
+    function copyLatestCode() {
+      var code = localStorage.getItem(LAST_CODE_KEY) || "";
+      if (!code) {
+        setMsg("暂无可复制的资格码，请先申请。", "err");
+        return;
+      }
+
+      navigator.clipboard.writeText(code).then(function () {
+        setMsg("已复制资格码：" + code, "ok");
+      }).catch(function () {
+        setMsg("复制失败，请手动复制：" + code, "err");
+      });
+    }
+
+    claimBtn.addEventListener("click", claimCode);
+    copyBtn.addEventListener("click", copyLatestCode);
+  })();
+</script>
