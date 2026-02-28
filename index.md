@@ -1,290 +1,51 @@
 ---
-title: 成绩查询系统使用指南
----
 
-<style>
-  :root {
-    --bg: #f5f8fc;
-    --card: #fff;
-    --line: #d9e2ec;
-    --text: #1f2d3d;
-    --sub: #5e6b7a;
-    --primary: #1677d2;
-    --ok: #1f8f4a;
-    --err: #c13830;
-  }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
-  }
-  .wrap {
-    max-width: 980px;
-    margin: 22px auto 40px;
-    padding: 0 12px;
-  }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 16px 18px;
-    margin-bottom: 14px;
-  }
-  h1, h2 {
-    margin: 0 0 8px;
-  }
-  p {
-    margin: 0;
-    line-height: 1.8;
-    color: var(--sub);
-  }
-  ol {
-    margin: 8px 0 0;
-    padding-left: 20px;
-    line-height: 1.9;
-  }
-  .shot-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 8px;
-  }
-  .shot-grid img {
-    width: 100%;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    display: block;
-  }
-  .shot-cap {
-    margin-top: 6px;
-    font-size: 13px;
-    color: var(--sub);
-  }
-  .claim-row {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 8px;
-    align-items: center;
-    margin: 8px 0;
-  }
-  .claim-row label {
-    color: var(--sub);
-    font-size: 14px;
-  }
-  .claim-row input {
-    height: 36px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 0 10px;
-    font-size: 14px;
-  }
-  .actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-  }
-  .btn {
-    border: none;
-    border-radius: 6px;
-    height: 36px;
-    padding: 0 14px;
-    cursor: pointer;
-    font-size: 14px;
-    background: var(--primary);
-    color: #fff;
-  }
-  .btn.secondary {
-    background: #eef4fb;
-    color: #315d86;
-    border: 1px solid #c8d8ea;
-  }
-  .msg {
-    margin-top: 10px;
-    min-height: 24px;
-    white-space: pre-wrap;
-    font-size: 14px;
-    line-height: 1.7;
-  }
-  .msg.ok {
-    color: var(--ok);
-  }
-  .msg.err {
-    color: var(--err);
-  }
-  code {
-    background: #f0f4f8;
-    border: 1px solid #e1e7ef;
-    padding: 1px 6px;
-    border-radius: 4px;
-  }
-  @media (max-width: 760px) {
-    .shot-grid {
-      grid-template-columns: 1fr;
-    }
-    .claim-row {
-      grid-template-columns: 1fr;
-      gap: 4px;
-    }
-  }
-</style>
+## title: 成绩模拟查询系统使用说明书
 
-<div class="wrap">
-  <div class="card">
-    <h1>成绩查询系统用户指南</h1>
-    <p>
-      本页用于指导用户完成资格码绑定、本地后台配置、成绩查询及常见问题排查。
-      首次使用建议按下方“快速开始”顺序操作。
-    </p>
-  </div>
+# 成绩模拟查询系统【使用说明书】
 
-  <div class="card">
-    <h2>快速开始</h2>
-    <ol>
-      <li>打开成绩查询主页，进入后台。</li>
-      <li>输入资格码并完成绑定确认。</li>
-      <li>在本地后台填写学校、报名号、科目名称与分数并保存。</li>
-      <li>回到查询页，输入姓名、证件号码、准考证号进行查询。</li>
-      <li>若资格码不可用，可在下方提交订单号申请补充资格码。</li>
-    </ol>
-  </div>
+本页用于指导用户完成资格码绑定、本地后台配置、成绩查询及常见问题排查。 首次使用建议按下方“快速开始”顺序操作。
 
-  <div class="card">
-    <h2>页面示例（图文）</h2>
-    <div class="shot-grid">
-      <div>
-        <img src="./assets/query-page.jpg" alt="查询页示例">
-        <div class="shot-cap">查询页：输入姓名、证件号码、准考证号。</div>
-      </div>
-      <div>
-        <img src="./assets/result-page.jpg" alt="结果页示例">
-        <div class="shot-cap">结果页：展示报名号、总分和各科成绩。</div>
-      </div>
-    </div>
-  </div>
+## 快速开始
 
-  <div class="card">
-    <h2>额外资格码申请</h2>
-    <p>
-      申请时需要填写订单号。页面仅校验格式为 <code>P + 18位数字</code>，例如：
-      <code>P787800186541310451</code>。
-    </p>
+1. 打开成绩查询主页，进入后台。
+2. 输入资格码并完成绑定确认。
+3. 在本地后台填写学校、报名号、科目名称与分数并保存。
+4. 回到查询页，输入姓名、证件号码、准考证号进行查询。
+5. 若资格码不可用，可在下方提交订单号申请补充资格码。
+6. 【以上任何步骤出现问题请看下方常见问题，大部分情况通过重新申请资格码并重新绑定即可解决】
 
-    <div class="claim-row">
-      <label for="orderNoInput">订单号</label>
-      <input id="orderNoInput" type="text" maxlength="32" placeholder="例如：P787800186541310451" autocomplete="off">
-    </div>
+## 额外资格码申请
 
-    <div class="actions">
-      <button id="claimCodeBtn" class="btn">申请新资格码</button>
-      <button id="copyCodeBtn" class="btn secondary">复制最新资格码</button>
-    </div>
-    <div id="claimMsg" class="msg"></div>
-  </div>
+如果您在“快速开始”第二步的时候绑定资格码出现问题，可以来这里重新申请新的资格码，申请时需要填写订单号（一个订单号支持申请两次）。
 
-  <div class="card">
-    <h2>常见问题（FAQ）</h2>
-    <ol>
-      <li>提示“服务暂不可用，请稍后重试”：通常是隧道或网络问题，请稍后再试。</li>
-      <li>提示“Code not found”：说明资格码不在当前后端数据中，需在服务器补码后重启 API。</li>
-      <li>换设备后原资格码不可用：可申请补充资格码，或让管理员在后台解除绑定后重新配置。</li>
-      <li>订单号格式错误：请使用 <code>P + 18位数字</code>（示例：<code>P787800186541310451</code>）。</li>
-    </ol>
-  </div>
+```
+<div class="claim-row">
+  <label for="orderNoInput">订单号</label>
+  <input id="orderNoInput" type="text" maxlength="32" placeholder="例如：P787800186541310451" autocomplete="off">
 </div>
 
-<script>
-  (function () {
-    // 固定后端地址（来自你提供的 health 链接）
-    var FIXED_HEALTH_URL = "https://patient-rec-atlanta-diary.trycloudflare.com/api/v1/health";
-    var FIXED_API_BASE = FIXED_HEALTH_URL.replace(/\/api\/v1\/health\/?$/i, "");
+<div class="actions">
+  <button id="claimCodeBtn" class="btn">申请新资格码</button>
+  <button id="copyCodeBtn" class="btn secondary">复制最新资格码</button>
+</div>
+<div id="claimMsg" class="msg"></div>
+```
 
-    var DEVICE_KEY = "yz_guide_device_id_v1";
-    var LAST_CODE_KEY = "yz_guide_last_claim_code_v1";
+## 常见问题（FAQ）
 
-    var orderNoInput = document.getElementById("orderNoInput");
-    var claimBtn = document.getElementById("claimCodeBtn");
-    var copyBtn = document.getElementById("copyCodeBtn");
-    var claimMsg = document.getElementById("claimMsg");
+1. 提示“服务暂不可用，请稍后重试”：通常是网络问题，请稍后刷新再试。
+2. 提示“Code not found”：在上方重新申请新的资格码，并绑定。
+3. 换设备后原资格码不可用：可申请补充资格码在新设备上重新绑定，或在原设备后台解除绑定后重新配置。
+4. 订单号格式错误：请使用订单中【`P开头】的号码串`。
+5. 手机端访问的页面样式和电脑端一致。
+6. 如果不小心提前绑定了，不用慌张，点击模拟查询页面的右上角“后台”，点击“解除绑定并重新配置”按钮重新输入原资格码即可。
+7. 打开模拟查询网址后发现没有后台绑定/页面白色？更换浏览器！一般只有手机会出现问题。最简单的方式，是把发货内容的完整段落复制并发送到微信文件传输助手上，然后直接点击链接进入（用微信默认的浏览器）。
+8. 打不开网址？资格码错误？99%是手动输入错误，请复制链接/资格码，并确定没有多余空格。
+9. 科目不对齐？中英文输入法的事情！中文输入下的括号会更大一些，英文输入下的括号会更小一些，所以如果出现不对齐的问题，请检查输入的时候括号是否不统一。
+10. 网站有效期？2026年1月1日至2026年12月12日。
+11. 能不能反复修改？在右上角-后台上，解除绑定后用原资格码进行重新修改。
+12. 能不能有水印？非官方页面，不支持水印。
+13. 会不会泄露我的信息？不会！完全不会！您的信息仅在您自己的设备上保存，不会上传。我们不会收集用户信息！
+14. 虚拟商品，一经发货不支持无理由退货哦，请谅解。
 
-    function normalizeOrderNo(orderNo) {
-      return String(orderNo || "").trim().toUpperCase();
-    }
-
-    function isValidOrderNo(orderNo) {
-      return /^P\d{18}$/.test(orderNo);
-    }
-
-    function getDeviceId() {
-      var existing = localStorage.getItem(DEVICE_KEY);
-      if (existing) return existing;
-      var seed = "dev-" + Math.random().toString(36).slice(2, 12) + Date.now().toString(36).slice(-4);
-      localStorage.setItem(DEVICE_KEY, seed);
-      return seed;
-    }
-
-    function setMsg(text, type) {
-      claimMsg.textContent = text || "";
-      claimMsg.className = "msg";
-      if (type === "ok") claimMsg.className += " ok";
-      if (type === "err") claimMsg.className += " err";
-    }
-
-    async function claim() {
-      var orderNo = normalizeOrderNo(orderNoInput.value);
-      if (!isValidOrderNo(orderNo)) {
-        setMsg("订单号格式错误，请输入 P + 18位数字（示例：P787800186541310451）。", "err");
-        return;
-      }
-
-      setMsg("正在申请，请稍候...", "");
-      try {
-        var response = await fetch(FIXED_API_BASE + "/api/v1/codes/claim-extra", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            deviceId: getDeviceId(),
-            orderNo: orderNo
-          })
-        });
-
-        var data = {};
-        try {
-          data = await response.json();
-        } catch (e) {
-          data = {};
-        }
-
-        if (!response.ok || !data.ok) {
-          var message = data.message || ("申请失败（HTTP " + response.status + "）");
-          setMsg(message, "err");
-          return;
-        }
-
-        localStorage.setItem(LAST_CODE_KEY, data.code || "");
-        setMsg("申请成功\n新资格码：" + (data.code || "无"), "ok");
-      } catch (e) {
-        setMsg("网络请求失败，请稍后重试。", "err");
-      }
-    }
-
-    function copyLastCode() {
-      var code = localStorage.getItem(LAST_CODE_KEY) || "";
-      if (!code) {
-        setMsg("暂无可复制的资格码，请先申请。", "err");
-        return;
-      }
-      navigator.clipboard
-        .writeText(code)
-        .then(function () {
-          setMsg("已复制资格码：" + code, "ok");
-        })
-        .catch(function () {
-          setMsg("复制失败，请手动复制：" + code, "err");
-        });
-    }
-
-    claimBtn.addEventListener("click", claim);
-    copyBtn.addEventListener("click", copyLastCode);
-  })();
-</script>
