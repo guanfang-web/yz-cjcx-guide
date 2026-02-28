@@ -4,7 +4,7 @@ Markdown homepage project for GitHub Pages user guide and FAQ.
 
 ## Local content
 
-- `index.md`: guide homepage (text + images + claim-extra widget)
+- `index.md`: guide homepage (text + images + claim-extra widget with order number input)
 - `assets/`: screenshots used by docs
 - `_config.yml`: Jekyll config for GitHub Pages
 
