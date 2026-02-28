@@ -5,7 +5,7 @@ title: 成绩查询系统使用指南
 <style>
   :root {
     --bg: #f5f8fc;
-    --card: #ffffff;
+    --card: #fff;
     --line: #d9e2ec;
     --text: #1f2d3d;
     --sub: #5e6b7a;
@@ -166,15 +166,10 @@ title: 成绩查询系统使用指南
   <div class="card">
     <h2>额外资格码申请</h2>
     <p>
-      接口：<code>POST /api/v1/codes/claim-extra</code><br>
-      说明：为防止滥用，申请时需要填写订单号。当前页面校验格式为 <code>P + 18位数字</code>，例如：
+      申请时需要填写订单号。页面仅校验格式为 <code>P + 18位数字</code>，例如：
       <code>P787800186541310451</code>。
     </p>
 
-    <div class="claim-row">
-      <label for="apiBaseInput">API 地址</label>
-      <input id="apiBaseInput" type="text" placeholder="例如：https://xxxx.trycloudflare.com">
-    </div>
     <div class="claim-row">
       <label for="orderNoInput">订单号</label>
       <input id="orderNoInput" type="text" maxlength="32" placeholder="例如：P787800186541310451" autocomplete="off">
@@ -190,7 +185,7 @@ title: 成绩查询系统使用指南
   <div class="card">
     <h2>常见问题（FAQ）</h2>
     <ol>
-      <li>提示“服务暂不可用，请稍后重试”：通常是隧道或网络问题，请确认 <code>API地址/api/v1/health</code> 可访问。</li>
+      <li>提示“服务暂不可用，请稍后重试”：通常是隧道或网络问题，请稍后再试。</li>
       <li>提示“Code not found”：说明资格码不在当前后端数据中，需在服务器补码后重启 API。</li>
       <li>换设备后原资格码不可用：可申请补充资格码，或让管理员在后台解除绑定后重新配置。</li>
       <li>订单号格式错误：请使用 <code>P + 18位数字</code>（示例：<code>P787800186541310451</code>）。</li>
@@ -200,19 +195,17 @@ title: 成绩查询系统使用指南
 
 <script>
   (function () {
+    // 固定后端地址（来自你提供的 health 链接）
+    var FIXED_HEALTH_URL = "https://patient-rec-atlanta-diary.trycloudflare.com/api/v1/health";
+    var FIXED_API_BASE = FIXED_HEALTH_URL.replace(/\/api\/v1\/health\/?$/i, "");
+
     var DEVICE_KEY = "yz_guide_device_id_v1";
-    var API_KEY = "yz_guide_api_base_v1";
     var LAST_CODE_KEY = "yz_guide_last_claim_code_v1";
 
-    var apiInput = document.getElementById("apiBaseInput");
     var orderNoInput = document.getElementById("orderNoInput");
     var claimBtn = document.getElementById("claimCodeBtn");
     var copyBtn = document.getElementById("copyCodeBtn");
     var claimMsg = document.getElementById("claimMsg");
-
-    function normalizeUrl(url) {
-      return String(url || "").trim().replace(/\/+$/, "");
-    }
 
     function normalizeOrderNo(orderNo) {
       return String(orderNo || "").trim().toUpperCase();
@@ -237,39 +230,16 @@ title: 成绩查询系统使用指南
       if (type === "err") claimMsg.className += " err";
     }
 
-    function getApiBaseFromUrl() {
-      try {
-        var params = new URLSearchParams(window.location.search || "");
-        return normalizeUrl(params.get("apiBase") || params.get("api") || "");
-      } catch (e) {
-        return "";
-      }
-    }
-
-    function getDefaultApiBase() {
-      var byUrl = getApiBaseFromUrl();
-      if (byUrl) return byUrl;
-      return normalizeUrl(localStorage.getItem(API_KEY) || "");
-    }
-
     async function claim() {
-      var apiBase = normalizeUrl(apiInput.value);
       var orderNo = normalizeOrderNo(orderNoInput.value);
-
-      if (!/^https?:\/\//i.test(apiBase)) {
-        setMsg("请先填写可访问的 API 地址（http/https）。", "err");
-        return;
-      }
       if (!isValidOrderNo(orderNo)) {
         setMsg("订单号格式错误，请输入 P + 18位数字（示例：P787800186541310451）。", "err");
         return;
       }
 
-      localStorage.setItem(API_KEY, apiBase);
       setMsg("正在申请，请稍候...", "");
-
       try {
-        var response = await fetch(apiBase + "/api/v1/codes/claim-extra", {
+        var response = await fetch(FIXED_API_BASE + "/api/v1/codes/claim-extra", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -294,7 +264,7 @@ title: 成绩查询系统使用指南
         localStorage.setItem(LAST_CODE_KEY, data.code || "");
         setMsg("申请成功\n新资格码：" + (data.code || "无"), "ok");
       } catch (e) {
-        setMsg("网络请求失败，请确认 API 地址可访问后稍后重试。", "err");
+        setMsg("网络请求失败，请稍后重试。", "err");
       }
     }
 
@@ -314,7 +284,6 @@ title: 成绩查询系统使用指南
         });
     }
 
-    apiInput.value = getDefaultApiBase();
     claimBtn.addEventListener("click", claim);
     copyBtn.addEventListener("click", copyLastCode);
   })();
